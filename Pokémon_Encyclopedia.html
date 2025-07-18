@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Pokémon Encyclopedia</title>
+    <style>
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for theme changes */
+        }
+
+        .pokemon-card {
+            width: 200px; /* Base width */
+            margin: 10px;
+            display: flex; /* Use flexbox for card content */
+            flex-direction: column;
+            justify-content: space-between; /* Distribute space */
+            align-items: center; /* Center content horizontally */
+            text-align: center; /* Center text */
+            padding-bottom: 10px; /* Add some padding at the bottom */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for cards */
+            transition: transform 0.2s ease-in-out; /* Smooth hover effect */
+        }
+        .pokemon-card:hover {
+            transform: translateY(-5px); /* Lift card on hover */
+        }
+        .pokemon-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain; /* Changed to contain to prevent stretching/cropping */
+            padding: 10px; /* Padding around image */
+        }
+        /* Responsive adjustments for cards */
+        @media (min-width: 576px) { /* Small devices and up */
+            .pokemon-card {
+                width: 180px; /* Slightly smaller for small screens */
+            }
+        }
+        @media (min-width: 768px) { /* Medium devices and up */
+            .pokemon-card {
+                width: 200px; /* Original width for medium screens */
+            }
+        }
+        @media (min-width: 992px) { /* Large devices and up */
+            .pokemon-card {
+                width: 220px; /* Slightly larger for large screens */
+            }
+        }
+
+        /* Type badges for better visual distinction */
+        .badge {
+            font-size: 0.85em;
+            padding: 0.4em 0.7em;
+            margin: 2px; /* Small margin between badges */
+        }
+
+        /* Custom styles for different Pokémon types */
+        .badge.bg-normal { background-color: #A8A77A !important; }
+        .badge.bg-fire { background-color: #EE8130 !important; }
+        .badge.bg-water { background-color: #6390F0 !important; }
+        .badge.bg-grass { background-color: #7AC74C !important; }
+        .badge.bg-electric { background-color: #F7D02C !important; }
+        .badge.bg-ice { background-color: #96D9D6 !important; }
+        .badge.bg-fighting { background-color: #C22E28 !important; }
+        .badge.bg-poison { background-color: #A33EA1 !important; }
+        .badge.bg-ground { background-color: #E2BF65 !important; }
+        .badge.bg-flying { background-color: #A98FF3 !important; }
+        .badge.bg-psychic { background-color: #F95587 !important; }
+        .badge.bg-bug { background-color: #A6B91A !important; }
+        .badge.bg-rock { background-color: #B6A136 !important; }
+        .badge.bg-ghost { background-color: #735797 !important; }
+        .badge.bg-dragon { background-color: #6F35FC !important; }
+        .badge.bg-steel { background-color: #B7B7CE !important; }
+        .badge.bg-fairy { background-color: #D685AD !important; }
+        .badge.bg-dark { background-color: #705746 !important; }
+        .badge.bg-unknown { background-color: #68A090 !important; }
+        .badge.bg-shadow { background-color: #4C2D6A !important; }
+
+        /* Styles for active dropdown toggles */
+        .nav-link.dropdown-toggle.active {
+            color: #fff !important;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 0.25rem;
+        }
+
+        /* --- Dark Mode Styles --- */
+        body.dark-mode {
+            background-color: #212529; /* Dark background */
+            color: #e2e6ea; /* Light text for general content */
+        }
+
+        body.dark-mode .navbar {
+            background-color: #343a40 !important; /* Slightly lighter dark navbar */
+        }
+
+        body.dark-mode .container {
+            background-color: #212529; /* Match body background */
+        }
+
+        body.dark-mode .pokemon-card {
+            background-color: #343a40; /* Darker card background */
+            color: #e2e6ea; /* Light text on cards */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4); /* Darker shadow for cards */
+        }
+
+        body.dark-mode .card-title {
+            color: #ffffff; /* White title text */
+        }
+
+        body.dark-mode .btn-primary {
+            background-color: #0d6efd; /* Keep primary button color */
+            border-color: #0d6efd;
+            filter: brightness(0.9); /* Slightly dim primary buttons in dark mode */
+        }
+
+        body.dark-mode .btn-outline-success {
+            color: #198754; /* Green text for outline button */
+            border-color: #198754;
+        }
+
+        body.dark-mode .form-control {
+            background-color: #495057; /* Darker input background */
+            color: #e2e6ea; /* Light text in input */
+            border-color: #6c757d;
+        }
+        body.dark-mode .form-control::placeholder {
+            color: #adb5bd; /* Lighter placeholder text */
+        }
+
+        body.dark-mode .modal-content {
+            background-color: #343a40; /* Darker modal background */
+            color: #e2e6ea; /* Light text in modal */
+        }
+        body.dark-mode .modal-header {
+            border-bottom-color: #495057; /* Darker modal header border */
+        }
+        body.dark-mode .modal-title {
+            color: #ffffff; /* White modal title */
+        }
+        body.dark-mode .modal-body {
+            color: #e2e6ea;
+        }
+        body.dark-mode .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%); /* Make close button visible on dark */
+        }
+
+        body.dark-mode .alert-danger {
+            background-color: #58151c;
+            color: #f8d7da;
+            border-color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Pokémon Encyclopedia</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#" id="home-filter" data-filter-type="all">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownGen" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Generation
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownGen" id="generation-filter-menu">
+                            <li><a class="dropdown-item generation-filter-link" href="#" data-gen-id="all">All Generations</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item generation-filter-link" href="#" data-gen-id="1">Generation I</a></li>
+                            <li><a class="dropdown-item generation-filter-link" href="#" data-gen-id="2">Generation II</a></li>
+                            <li><a class="dropdown-item generation-filter-link" href="#" data-gen-id="3">Generation III</a></li>
+                            <li><a class="dropdown-item generation-filter-link" href="#" data-gen-id="4">Generation IV</a></li>
+                            <li><a class="dropdown-item generation-filter-link" href="#" data-gen-id="5">Generation V</a></li>
+                            <li><a class="dropdown-item generation-filter-link" href="#" data-gen-id="6">Generation VI</a></li>
+                            <li><a class="dropdown-item generation-filter-link" href="#" data-gen-id="7">Generation VII</a></li>
+                            <li><a class="dropdown-item generation-filter-link" href="#" data-gen-id="8">Generation VIII</a></li>
+                            <li><a class="dropdown-item generation-filter-link" href="#" data-gen-id="9">Generation IX</a></li>
+                            </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownType" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Type
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownType" id="type-filter-menu">
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="all">All Types</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="normal">Normal</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="fire">Fire</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="water">Water</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="grass">Grass</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="electric">Electric</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="ice">Ice</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="fighting">Fighting</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="poison">Poison</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="ground">Ground</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="flying">Flying</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="psychic">Psychic</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="bug">Bug</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="rock">Rock</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="ghost">Ghost</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="dragon">Dragon</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="steel">Steel</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="fairy">Fairy</a></li>
+                            <li><a class="dropdown-item type-filter-link" href="#" data-type="dark">Dark</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex me-3" id="search-form">
+                    <input class="form-control me-2" type="search" placeholder="Search Pokémon" aria-label="Search" id="pokemon-search-input">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <div class="form-check form-switch text-light">
+                    <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                    <label class="form-check-label" for="darkModeToggle">Dark Mode</label>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="row justify-content-center" id="pokemon-grid">
+            <div id="loading-spinner" class="text-center my-5 d-none">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading Pokémon...</p>
+            </div>
+            <div id="error-message" class="alert alert-danger d-none" role="alert">
+                Failed to load Pokémon. Please try again later.
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="pokemon-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pokemon-modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="pokemon-modal-body">
+                    </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+    <script>
+        const pokemonGrid = document.getElementById('pokemon-grid');
+        const searchInput = document.getElementById('pokemon-search-input');
+        const searchForm = document.getElementById('search-form');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const errorMessage = document.getElementById('error-message');
+
+        const homeFilterLink = document.getElementById('home-filter');
+        const generationFilterLinks = document.querySelectorAll('.generation-filter-link');
+        const typeFilterLinks = document.querySelectorAll('.type-filter-link');
+
+        // Dark Mode Elements
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body; // Reference to the body element
+
+        let allPokemonsData = []; // Stores ALL fetched Pokémon data
+        let currentGenerationFilter = 'all'; // Default filter for generation
+        let currentTypeFilter = 'all'; // Default filter for type
+        let currentSearchTerm = ''; // Default search term
+
+        // Define Pokémon National Pokédex ID ranges for each generation
+        const generationRanges = {
+            '1': { start: 1, end: 151 },
+            '2': { start: 152, end: 251 },
+            '3': { start: 252, end: 386 },
+            '4': { start: 387, end: 493 },
+            '5': { start: 494, end: 649 },
+            '6': { start: 650, end: 721 },
+            '7': { start: 722, end: 809 },
+            '8': { start: 810, end: 905 },
+            '9': { start: 906, end: 1025 }, // Current Gen 9 end as of recent updates
+            // Add new generations here if PokeAPI expands
+        };
+
+        // --- Dark Mode Logic ---
+        function enableDarkMode() {
+            body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+            darkModeToggle.checked = true; // Ensure toggle reflects state
+        }
+
+        function disableDarkMode() {
+            body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+            darkModeToggle.checked = false; // Ensure toggle reflects state
+        }
+
+        // Check user's preferred theme on page load
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                enableDarkMode();
+            } else {
+                disableDarkMode(); // Default to light if no preference or 'light'
+            }
+        }
+
+        // Event listener for the dark mode toggle
+        darkModeToggle.addEventListener('change', () => {
+            if (darkModeToggle.checked) {
+                enableDarkMode();
+            } else {
+                disableDarkMode();
+            }
+        });
+
+        // Call loadThemePreference when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', loadThemePreference);
+
+
+        // --- Utility Functions ---
+
+        function showLoading(show) {
+            if (show) {
+                loadingSpinner.classList.remove('d-none');
+                errorMessage.classList.add('d-none');
+                pokemonGrid.innerHTML = ''; // Clear existing content
+            } else {
+                loadingSpinner.classList.add('d-none');
+            }
+        }
+
+        function showError(show) {
+            if (show) {
+                errorMessage.classList.remove('d-none');
+                loadingSpinner.classList.add('d-none');
+            } else {
+                errorMessage.classList.add('d-none');
+            }
+        }
+
+        function getPokemonImageUrl(pokemon) {
+            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
+        }
+
+        // --- Main Data Fetching ---
+
+        async function fetchAllPokemonDetails() {
+            showLoading(true);
+            try {
+                // Fetch ALL Pokémon (using a high limit to ensure all are fetched)
+                // As of recent updates, ~1025 Pokémon exist. 1300 is a safe high limit.
+                const listResponse = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1300'); // Set to 1300 or higher
+                const pokemonsOverview = listResponse.data.results;
+
+                const detailPromises = pokemonsOverview.map(pokemon => axios.get(pokemon.url));
+                const detailResponses = await Promise.all(detailPromises);
+
+                allPokemonsData = detailResponses.map(response => response.data);
+                applyFiltersAndRender(); // Initial render after all data is loaded
+                showLoading(false);
+
+            } catch (error) {
+                console.error("Error fetching Pokémon data:", error);
+                showLoading(false);
+                showError(true);
+            }
+        }
+
+        fetchAllPokemonDetails(); // Start fetching data
+
+        // --- Rendering Function ---
+
+        function renderPokemons(pokemonsToDisplay) {
+            pokemonGrid.innerHTML = ''; // Clear existing cards
+            if (pokemonsToDisplay.length === 0) {
+                pokemonGrid.innerHTML = '<p class="text-center text-muted">No Pokémon found matching your criteria.</p>';
+                return;
+            }
+
+            pokemonsToDisplay.forEach(pokemon => {
+                const pokemonCard = document.createElement('div');
+                pokemonCard.classList.add('col-xl-2', 'col-lg-3', 'col-md-4', 'col-sm-6', 'col-12', 'card', 'pokemon-card', 'mb-3');
+                pokemonCard.innerHTML = `
+                    <img src="${getPokemonImageUrl(pokemon)}" alt="${pokemon.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h5>
+                        <button class="btn btn-primary btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#pokemon-modal" data-pokemon-id="${pokemon.id}">Details</button>
+                    </div>
+                `;
+                const detailsButton = pokemonCard.querySelector('.btn-primary');
+                detailsButton.addEventListener('click', () => getPokemonDetails(pokemon.id));
+                pokemonGrid.appendChild(pokemonCard);
+            });
+        }
+
+        // --- Filtering Logic ---
+
+        // This is the core function that applies all active filters
+        function applyFiltersAndRender() {
+            let filtered = allPokemonsData;
+
+            // 1. Apply Generation Filter
+            if (currentGenerationFilter !== 'all') {
+                const range = generationRanges[currentGenerationFilter];
+                if (range) { // Ensure the range exists
+                    filtered = filtered.filter(pokemon =>
+                        pokemon.id >= range.start && pokemon.id <= range.end
+                    );
+                }
+            }
+
+            // 2. Apply Type Filter
+            if (currentTypeFilter !== 'all') {
+                filtered = filtered.filter(pokemon =>
+                    pokemon.types.some(typeInfo => typeInfo.type.name === currentTypeFilter)
+                );
+            }
+
+            // 3. Apply Search Term Filter
+            if (currentSearchTerm) {
+                filtered = filtered.filter(pokemon =>
+                    pokemon.name.toLowerCase().includes(currentSearchTerm)
+                );
+            }
+
+            renderPokemons(filtered);
+        }
+
+        // --- Event Listeners ---
+
+        // Search Input Listener
+        searchInput.addEventListener('input', () => {
+            currentSearchTerm = searchInput.value.toLowerCase().trim();
+            applyFiltersAndRender();
+        });
+
+        // Search Form Submit Listener
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            currentSearchTerm = searchInput.value.toLowerCase().trim();
+            applyFiltersAndRender();
+        });
+
+        // Home Link Listener
+        homeFilterLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            searchInput.value = ''; // Clear search
+            currentSearchTerm = '';
+            currentGenerationFilter = 'all'; // Reset generation filter
+            currentTypeFilter = 'all'; // Reset type filter
+
+            applyFiltersAndRender();
+            updateActiveNavLink(e.target); // Update active class for Home
+            // Reset dropdown texts
+            document.getElementById('navbarDropdownGen').textContent = 'Generation';
+            document.getElementById('navbarDropdownType').textContent = 'Type';
+        });
+
+        // Generation Filter Links Listener
+        generationFilterLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentGenerationFilter = e.target.dataset.genId; // Get selected generation ID
+                searchInput.value = ''; // Clear search when filter changes
+                currentSearchTerm = '';
+                
+                applyFiltersAndRender();
+                updateActiveNavLink(e.target); // Update active class
+                document.getElementById('navbarDropdownGen').textContent = e.target.textContent; // Update dropdown text
+            });
+        });
+
+        // Type Filter Links Listener
+        typeFilterLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentTypeFilter = e.target.dataset.type; // Get selected type
+                searchInput.value = ''; // Clear search when filter changes
+                currentSearchTerm = '';
+
+                applyFiltersAndRender();
+                updateActiveNavLink(e.target); // Update active class
+                document.getElementById('navbarDropdownType').textContent = e.target.textContent; // Update dropdown text
+            });
+        });
+
+        // Helper to update active class in navbar
+        function updateActiveNavLink(clickedLink) {
+            // Remove active from all previous main nav items and dropdown toggles
+            document.querySelectorAll('.navbar-nav .nav-link.active').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // For the clicked link, check if it's inside a dropdown or is the home link
+            if (clickedLink.classList.contains('dropdown-item')) {
+                const parentDropdownToggle = clickedLink.closest('.dropdown').querySelector('.dropdown-toggle');
+                if (parentDropdownToggle) {
+                    parentDropdownToggle.classList.add('active');
+                }
+            } else { // If it's the home link
+                clickedLink.classList.add('active');
+            }
+        }
+
+        // --- Modal Details Function ---
+
+        function getPokemonDetails(pokemonId) {
+            const pokemonModalTitle = document.getElementById('pokemon-modal-title');
+            const pokemonModalBody = document.getElementById('pokemon-modal-body');
+
+            pokemonModalTitle.textContent = 'Loading...';
+            pokemonModalBody.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading details...</span>
+                    </div>
+                </div>
+            `;
+
+            try {
+                // Find the Pokémon data from the already fetched allPokemonsData
+                const pokemon = allPokemonsData.find(p => p.id == pokemonId);
+
+                if (!pokemon) {
+                    throw new Error("Pokémon details not found in cached data.");
+                }
+
+                pokemonModalTitle.textContent = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+
+                // Generate type badges with specific colors
+                const typeBadges = pokemon.types.map(typeInfo => {
+                    const typeName = typeInfo.type.name;
+                    return `<span class="badge bg-${typeName} me-1">${typeName.charAt(0).toUpperCase() + typeName.slice(1)}</span>`;
+                }).join('');
+
+                pokemonModalBody.innerHTML = `
+                    <div class="text-center mb-3">
+                        <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" class="img-fluid" style="max-width: 150px;">
+                    </div>
+                    <p><strong>Height:</strong> ${pokemon.height / 10} m</p>
+                    <p><strong>Weight:</strong> ${pokemon.weight / 10} kg</p>
+                    <p><strong>Types:</strong> ${typeBadges}</p>
+                    <h6>Abilities:</h6>
+                    <ul>
+                        ${pokemon.abilities.map(abilityInfo => `<li>${abilityInfo.ability.name.charAt(0).toUpperCase() + abilityInfo.ability.name.slice(1)}</li>`).join('')}
+                    </ul>
+                `;
+            } catch (error) {
+                console.error("Error fetching Pokémon details:", error);
+                pokemonModalTitle.textContent = 'Error';
+                pokemonModalBody.innerHTML = '<p class="text-danger">Failed to load Pokémon details. Please try again.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
