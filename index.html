@@ -8,6 +8,10 @@
     <title>Pokémon Encyclopedia</title>
     <style>
         body {
+            background-image: url('https://raw.githubusercontent.com/aryashubh001/Pokemon-Encyclopedia/main/image/background%20img.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
@@ -15,7 +19,7 @@
         .flip-card-container {
             perspective: 1000px; /* Gives the 3D effect */
             width: 200px; /* Base width for single card */
-            height: 825px; /* Adjust height as needed to fit content */
+            height: 850px; /* Adjust height as needed to fit content */
             margin: 10px;
             position: relative;
         }
@@ -188,7 +192,11 @@
 
         /* --- Dark Mode Styles --- */
         body.dark-mode {
-            background-color: #212529;
+            background-image: url('https://raw.githubusercontent.com/aryashubh001/Pokemon-Encyclopedia/main/image/background%20img.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #212529; /* Fallback color for dark mode */
             color: #e2e6ea;
         }
 
@@ -197,7 +205,7 @@
         }
 
         body.dark-mode .container {
-            background-color: #212529;
+            background-color: rgba(33, 37, 41, 0.85); /* Slightly transparent dark color */
         }
 
         body.dark-mode .btn-primary {
@@ -381,7 +389,7 @@
                             <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="rock">Rock</a></li>
                             <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="ghost">Ghost</a></li>
                             <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="dragon">Dragon</a></li>
-                            <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="steel">Steel</a></li>
+                            <li><a class="dropdown-item secondary-type-link" href="#" data-secondary-type="steel">Steel</a></li>
                             <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="fairy">Fairy</a></li>
                             <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="dark">Dark</a></li>
                         </ul>
@@ -1155,17 +1163,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
