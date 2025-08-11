@@ -19,7 +19,7 @@
         .flip-card-container {
             perspective: 1000px; /* Gives the 3D effect */
             width: 200px; /* Base width for single card */
-            height: 850px; /* Adjust height as needed to fit content */
+            height: 825px; /* Adjust height as needed to fit content */
             margin: 10px;
             position: relative;
         }
@@ -62,16 +62,16 @@
         }
 
         .pokemon-card-front {
-            background-color: #f8f9fa; /* Light background for front */
+            background-color: rgba(248, 249, 250, 0.8); /* Light translucent background */
             color: #212529; /* Dark text for front */
         }
         body.dark-mode .pokemon-card-front {
-            background-color: #343a40;
+            background-color: rgba(52, 58, 64, 0.8);
             color: #e2e6ea;
         }
 
         .pokemon-card-back {
-            background-color: #e9ecef; /* Slightly darker background for back */
+            background-color: rgba(233, 236, 239, 0.8); /* Light translucent background for back */
             color: #212529; /* Dark text for back */
             transform: rotateY(180deg); /* Start rotated for the back side */
             overflow-y: auto; /* For potentially long details */
@@ -81,7 +81,7 @@
             align-items: stretch; /* Stretch content horizontally */
         }
         body.dark-mode .pokemon-card-back {
-            background-color: #495057;
+            background-color: rgba(73, 80, 87, 0.8);
             color: #e2e6ea;
         }
 
@@ -306,8 +306,6 @@
             .regional-pair-wrapper { flex-direction: column; align-items: center; } /* Stack vertically on small screens */
             .regional-pair-wrapper .flip-card-container { width: 200px; margin: 10px 0; } /* Revert to normal card size */
         }
-
-
     </style>
 </head>
 <body>
@@ -389,7 +387,7 @@
                             <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="rock">Rock</a></li>
                             <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="ghost">Ghost</a></li>
                             <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="dragon">Dragon</a></li>
-                            <li><a class="dropdown-item secondary-type-link" href="#" data-secondary-type="steel">Steel</a></li>
+                            <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="steel">Steel</a></li>
                             <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="fairy">Fairy</a></li>
                             <li><a class="dropdown-item secondary-type-filter-link" href="#" data-secondary-type="dark">Dark</a></li>
                         </ul>
