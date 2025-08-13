@@ -22,4 +22,5 @@ Key Features: All generations, search, type filter, generation filter, detailed 
 Data Source: PokeAPI.
 
 Design Principles (Optional): Responsive, dynamic, user-friendly.
-Published Link : https://aryashubh001.github.io/Pokemon-Encyclopedia/
+## Published Link 
+https://aryashubh001.github.io/Pokemon-Encyclopedia/
